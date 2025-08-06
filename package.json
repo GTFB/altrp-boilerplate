@@ -9,7 +9,11 @@
       "dev": "turbo run dev",
       "lint": "turbo run lint",
       "test": "turbo run test",
-      "format": "prettier --write \"**/*.{ts,tsx,md}\""
+      "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+      "setup": "cd scripts && bash setup.sh -d altrp.localhost",
+      "docker:up": "docker compose up --build -d",
+      "docker:down": "docker compose down -v",
+      "docker:logs": "docker compose logs -f"
     },
     "workspaces": [
       "apps/*",

@@ -28,6 +28,9 @@
       ],
       "@payload-config": [
         "./src/payload.config.ts"
+      ],
+      "payload/shared": [
+        "./src/shared/index.ts"
       ]
     },
     "target": "ES2022",

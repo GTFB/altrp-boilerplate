@@ -25,6 +25,8 @@ WORKDIR /app
 COPY --from=installer /app/ .
 # Then, copy the pruned source code from the pruner stage
 COPY --from=pruner /app/out/full/ .
+# Copy turbo.json for Turborepo configuration
+COPY --from=pruner /app/turbo.json ./turbo.json
 # Now, the workspace is complete. Run the build.
 RUN npm run build -- --filter=payload
 

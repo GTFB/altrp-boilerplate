@@ -1,84 +1,127 @@
 #!/bin/bash
 
-# ===================================================================================
-# Altrp Boilerplate - Client Setup Script
-# Version: 1.1 (Added MASTRA_API_KEY generation)
-# Description: This script configures a cloned boilerplate for a new client project.
-#              It generates the .env file and helps set up Git remotes for updates.
-# ===================================================================================
-
-# --- Color Definitions ---
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-RED='\033[0;31m'
-NC='\033[0m'
-
-# --- Main Script Logic ---
-main() {
-    clear
-    echo -e "${BLUE}====================================================${NC}"
-    echo -e "${BLUE}  🚀 Welcome to the Altrp Project Setup Script  🚀   ${NC}"
-    echo -e "${BLUE}====================================================${NC}"
-    echo
-    echo "This script will configure your cloned repository to work as a standalone project"
-    echo "while keeping a link to the original template for future updates."
-    echo
-
-    # 1. Check for existing .env file
-    if [ -f ".env" ]; then
-        echo -e "${YELLOW}⚠️  An .env file already exists.${NC}"
-        read -p "Do you want to overwrite it? This cannot be undone. (y/n): " OVERWRITE_ENV
-        if [[ "$OVERWRITE_ENV" != "y" ]]; then
-            echo "Setup aborted by user."
-            exit 0
-        fi
-    fi
-
-    # 2. Generate Secrets
-    echo -e "${YELLOW}🔑 Generating unique secrets...${NC}"
-    PAYLOAD_SECRET=$(openssl rand -hex 32)
-    POSTGRES_PASSWORD=$(openssl rand -hex 24)
-    N8N_ENCRYPTION_KEY=$(openssl rand -hex 32)
-    MASTRA_API_KEY=$(openssl rand -hex 32) # <-- ДОБАВЛЕНА ЭТА СТРОКА
-    echo -e "${GREEN}✅ Secrets generated.${NC}"
-
-    # 3. Create and Configure .env file
-    echo -e "${YELLOW}📝 Creating and configuring the .env file...${NC}"
-    cp .env.template .env
-    sed -i.bak "s|{GENERATE_PAYLOAD_SECRET}|${PAYLOAD_SECRET}|g" .env
-    sed -i.bak "s|{GENERATE_POSTGRES_PASSWORD}|${POSTGRES_PASSWORD}|g" .env
-    sed -i.bak "s|{GENERATE_N8N_ENCRYPTION_KEY}|${N8N_ENCRYPTION_KEY}|g" .env
-    sed -i.bak "s|{GENERATE_MASTRA_API_KEY}|${MASTRA_API_KEY}|g" .env # <-- И ДОБАВЛЕНА ЭТА СТРОКА
-    rm .env.bak
-    echo -e "${GREEN}✅ .env file configured successfully.${NC}"
-
-    # 4. Configure Git Remotes
-    echo
-    echo -e "${YELLOW}🔗 Configuring Git remotes...${NC}"
-    read -p "Enter the SSH or HTTPS URL of YOUR new empty Git repository (e.g., git@github.com:user/my-project.git): " NEW_REPO_URL
-    if [[ -n "$NEW_REPO_URL" ]]; then
-        git remote rename origin upstream
-        git remote add origin "$NEW_REPO_URL"
-        echo -e "${GREEN}✅ Git remotes have been set up.${NC}"
-        echo "Your project is now linked to your repository. The original template is available as 'upstream'."
-        echo "You can now run 'git push -u origin main' to push the initial code to your repository."
-    else
-        echo -e "${YELLOW}⚠️  No repository URL provided. Skipping Git remote configuration.${NC}"
-        echo "You can set it up manually later."
-    fi
-
-    # 5. Final Success Message
-    echo
-    echo -e "${GREEN}====================================================${NC}"
-    echo -e "${GREEN}  🎉 Your project is successfully configured! 🎉   ${NC}"
-    echo -e "${GREEN}====================================================${NC}"
-    echo
-    echo "Next steps:"
-    echo -e "1. Start all services: ${YELLOW}make up${NC} or ${YELLOW}docker compose up --build -d${NC}"
-    echo "2. Push the code to your new repository: ${YELLOW}git push -u origin main${NC}"
-    echo
+# Function to generate secure random secrets
+generate_secret() {
+  openssl rand -hex 32
 }
 
-# --- Run the main function ---
-main
+# Function to show help
+show_help() {
+  cat << EOF
+Development Environment Setup Script
+
+USAGE:
+  ./setup.sh -d <domain> [-h]
+
+OPTIONS:
+  -d <domain>     Project domain (required)
+                  Example: altrp.localhost, example.com, mydomain.local
+  
+  -h              Show this help message
+
+EXAMPLES:
+  # For local development
+  ./setup.sh -d altrp.localhost
+
+  # For production
+  ./setup.sh -d mydomain.com
+
+  # For staging
+  ./setup.sh -d staging.mydomain.com
+
+DESCRIPTION:
+  This script reads .env.template file and creates a .env file with all 
+  necessary environment variables for the ALTRP project. It automatically 
+  generates secure secrets for:
+  - Database password
+  - Payload CMS secret
+  - N8N encryption key
+  - Mastra API key
+  
+  The script validates required parameters and ensures all secrets are
+  properly generated for secure deployment.
+
+EOF
+}
+
+# Initialize variables
+PROJECT_DOMAIN=""
+
+# Parse command line arguments
+while getopts "d:h" opt; do
+  case ${opt} in
+    d )
+      PROJECT_DOMAIN="$OPTARG"
+      ;;
+    h )
+      show_help
+      exit 0
+      ;;
+    \? )
+      echo "Error: Invalid option -$OPTARG" >&2
+      echo "Use -h for help"
+      exit 1
+      ;;
+    : )
+      echo "Error: Option -$OPTARG requires an argument" >&2
+      echo "Use -h for help"
+      exit 1
+      ;;
+  esac
+done
+
+# Validate required parameters
+if [ -z "$PROJECT_DOMAIN" ]; then
+  echo "Error: Project domain is required (-d parameter)"
+  echo "Use -h for help"
+  exit 1
+fi
+
+# Check if .env.template exists
+if [ ! -f "../.env.template" ]; then
+  echo "Error: .env.template file not found in project root!"
+  echo "Please ensure .env.template exists in the project directory."
+  exit 1
+fi
+
+# Check if .env file already exists
+if [ -f "../.env" ]; then
+  echo "Error: .env file already exists!"
+  echo "📁 Location: $(realpath ../.env)"
+  echo ""
+  echo "To regenerate the .env file, please:"
+  echo "  1. Remove the existing file: rm ../.env"
+  echo "  2. Run this script again: ./setup.sh -d ${PROJECT_DOMAIN}"
+  echo ""
+  echo "Or use -f flag to force overwrite (not implemented yet)"
+  exit 1
+fi
+
+# Generate secrets
+echo "Generating secure secrets..."
+POSTGRES_PASSWORD=$(generate_secret)
+PAYLOAD_SECRET=$(generate_secret)
+N8N_ENCRYPTION_KEY=$(generate_secret)
+MASTRA_API_KEY=$(generate_secret)
+
+# Create .env file from template
+echo "Creating .env file from .env.template..."
+
+# Read template and substitute placeholders
+sed -e "s/PROJECT_DOMAIN=altrp.localhost/PROJECT_DOMAIN=${PROJECT_DOMAIN}/" \
+    -e "s/{GENERATE_POSTGRES_PASSWORD}/${POSTGRES_PASSWORD}/g" \
+    -e "s/{GENERATE_PAYLOAD_SECRET}/${PAYLOAD_SECRET}/g" \
+    -e "s/{GENERATE_N8N_ENCRYPTION_KEY}/${N8N_ENCRYPTION_KEY}/g" \
+    -e "s/{GENERATE_MASTRA_API_KEY}/${MASTRA_API_KEY}/g" \
+    -e "s/# --- COPY THIS FILE TO .env AND FILL IN THE VALUES ---/# --- GENERATED BY setup.sh SCRIPT ---/" \
+    "../.env.template" > "../.env"
+
+echo "✅ .env file created successfully!"
+echo "📁 Location: $(realpath ../.env)"
+echo "🔐 Generated secure secrets for:"
+echo "   - Database password"
+echo "   - Payload CMS secret"
+echo "   - N8N encryption key"
+echo "   - Mastra API key"
+echo ""
+echo "🚀 You can now run: docker-compose up -d"
