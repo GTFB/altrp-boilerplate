@@ -53,7 +53,6 @@ This project is standardized on an AI-first workflow.
 
 ### 2. Clone and Configure
 
-```bash
 # Clone the repository
 git clone https://github.com/gtfb/altrp-boilerplate.git
 cd altrp-boilerplate
