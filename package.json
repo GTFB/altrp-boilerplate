@@ -1,0 +1,24 @@
+{
+    "name": "altrp-boilerplate",
+    "version": "1.0.0",
+    "description": "The Altrp Digital Asset Factory",
+    "private": true,
+    "packageManager": "npm@10.8.2",
+    "scripts": {
+      "build": "turbo run build",
+      "dev": "turbo run dev",
+      "lint": "turbo run lint",
+      "test": "turbo run test",
+      "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    },
+    "workspaces": [
+      "apps/*",
+      "packages/*"
+    ],
+    "devDependencies": {
+      "prettier": "^3.2.5",
+      "turbo": "^2.0.6"
+    },
+    "author": "Altrp.io",
+    "license": "MIT"
+  }

@@ -1,0 +1,108 @@
+services:
+  # 1. Reverse Proxy
+  traefik:
+    image: traefik:v3.0
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "8080:8080" # Dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/traefik-dynamic.yml:/etc/traefik/dynamic/dynamic.yml:ro
+    networks:
+      - altrp_network
+
+  # 2. Database
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - altrp_network
+
+  # 3. Cache
+  keydb:
+    image: eqalpha/keydb:latest
+    restart: unless-stopped
+    volumes:
+      - keydb_data:/data
+    networks:
+      - altrp_network
+
+  # 4. Backend / CMS
+  payload:
+    build:
+      context: .
+      dockerfile: apps/payload/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - keydb
+    environment:
+      DATABASE_URI: ${DATABASE_URI}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      NODE_ENV: production
+    volumes:
+      - ./media:/app/media # Mount the media volume for uploads
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.payload.rule=Host(`payload.${PROJECT_DOMAIN}`)"
+      - "traefik.http.services.payload.loadbalancer.server.port=3000"
+    networks:
+      - altrp_network
+
+  # 5. Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - payload
+    environment:
+      # Important: frontend communicates with backend using the service name inside Docker
+      NEXT_PUBLIC_SERVER_URL: http://payload:3000
+      NODE_ENV: production
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`${PROJECT_DOMAIN}`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+    networks:
+      - altrp_network
+
+  # 6. Automation
+  n8n:
+    image: n8nio/n8n:latest
+    restart: unless-stopped
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+    volumes:
+      - n8n_data:/home/node/.n8n
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.n8n.rule=Host(`n8n.${PROJECT_DOMAIN}`)"
+      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+    networks:
+      - altrp_network
+      
+# --- Volumes Definition ---
+volumes:
+  postgres_data:
+  keydb_data:
+  n8n_data:
+
+# --- Network Definition ---
+networks:
+  altrp_network:
+    driver: bridge

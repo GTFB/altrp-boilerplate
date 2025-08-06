@@ -1,9 +1,10 @@
 # 🏭 Altrp Boilerplate: The Digital Asset Factory
 
-![Status](https://img.shields.io/badge/status-work_in_progress-yellow.svg)
-![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+![Status](https://img.shields.io/badge/status-production_ready-green.svg)
+![License](https://img.shields.io/badge/license-Dual%20(MIT%20%2B%20Commercial)-lightgrey.svg)
+![Maintained](https://img.shields.io/badge/maintained-yes-brightgreen.svg)
 
-This is not just another starter-kit. This is a **production-ready factory** for creating, deploying, and managing isolated, modular web applications. We don't just write software; we build the machines that produce it.
+This is not just another starter kit. This is a **production-ready factory** for creating, deploying, and managing isolated, modular web applications. We don't just write software; we build the machines that produce it.
 
 ## 💡 The Big Idea: Why This Exists
 
@@ -19,87 +20,147 @@ We believe in **🔑 Total Ownership**. We don't rent you a storefront; we give 
 
 -   🏰 **Isolated Instances:** Each project is a self-contained fortress running on its own VPS. No "noisy neighbors," no shared databases. Paranoid-level security is the default.
 -   🧱 **Radical Modularity:** The system is built from independent, battle-tested open-source components (Payload, Next.js, n8n). Add features like E-commerce or CRM by activating modules, not by rewriting your core.
+-   📜 **Dual Licensing for Trust & Value:** A transparent model with a permissive MIT-licensed core engine and commercially licensed premium modules. You own the foundation, you subscribe to the power-ups.
 -   🛠️ **Production-Ready Stack:** Forget weeks of setup. Docker, Traefik, CI/CD, databases, and observability tools are all pre-configured and work in harmony.
 -   ❤️ **Obsessed with Developer Experience:** We designed this for `vibe-coding`. Monorepo with Turborepo, strict TypeScript, and Architecture-as-Code principles create an environment for deep focus and high velocity.
--   🤖 **AI-Native Architecture:** Built with a dedicated, decoupled microservice layer for AI agents. This isn't a feature; it's in the DNA.
+-   🤖 **AI-Native Architecture:** Built with a dedicated, decoupled microservice layer for AI agents and an AI-first development workflow. This isn't a feature; it's in the DNA.
 
-## 🚀 Tech Stack
+## 📜 Licensing Model: Own the Core, Subscribe to Power
 
-| Category        | Technology                                   |
-| --------------- | -------------------------------------------- |
-| **Infrastructure**  | Docker, Traefik, Coolify (Deployment)        |
-| **Backend / CMS**   | Payload CMS (TypeScript, Node.js)            |
-| **Frontend**      | Next.js (React, TypeScript)                  |
-| **Database**      | PostgreSQL, KeyDB (Cache/Queues)             |
-| **Automation**    | n8n                                          |
-| **Observability** | Metabase (Analytics), Uptime Kuma (Monitoring), GlitchTip (Error Tracking) |
-| **Secrets**       | Doppler                                      |
+Our licensing model is designed for transparency and trust. It gives you full ownership of the core platform while protecting the intellectual property of our advanced, premium features.
 
-## ⚡ Getting Started
+-   #### 🔵 **Core Engine (MIT License)**
+    The foundational boilerplate, including the project structure, build scripts, and all non-premium application code, is licensed under the **MIT License**.
+    -   **What this means:** You have complete freedom. You can modify, distribute, and use this core code for any purpose. You truly own your factory.
+    -   See the `LICENSE.md` file in the root directory for full details.
 
-### 📋 Prerequisites
+-   #### 💎 **Premium Modules (Commercial License)**
+    Advanced functionalities (e.g., E-commerce, CRM, advanced analytics) are located in the `apps/payload/src/collections/premium/` directory. This code is proprietary and governed by a **Commercial License**.
+    -   **What this means:** You are granted a license to use this code on your instance as part of an active subscription. You may not copy, modify, or redistribute this code.
+    -   See the `apps/payload/src/collections/premium/LICENSE.commercial.md` file for details.
 
--   [Docker](https://www.docker.com/products/docker-desktop/) & Docker Compose
--   [Node.js](https://nodejs.org/en/) (v18+ recommended)
+## 🚀 Getting Started
 
-### 1. Clone the Repository
+### 1. Development Environment Setup
+
+This project is standardized on an AI-first workflow.
+
+-   **Required Editor:** [**Cursor**](https://cursor.sh/). This AI-native editor is mandatory for all contributors.
+-   **System Tools:**
+    -   [Docker](https://www.docker.com/products/docker-desktop/) & Docker Compose
+    -   [Node.js](https://nodejs.org/en/) (v18+ recommended)
+    -   `make` (On Windows, this is available through Git Bash, which is our recommended terminal).
+
+### 2. Clone and Configure
 
 ```bash
+# Clone the repository
 git clone https://github.com/gtfb/altrp-boilerplate.git
 cd altrp-boilerplate
-```
 
-### 2. ⚠️ Set Up Environment Variables
-
-This is a critical step. Copy the template and fill in your secrets.
-
-```bash
+# This is a critical step. Copy the template and fill in your secrets.
 cp .env.template .env
-```
-Now, open the `.env` file and provide values for all variables. Use `openssl rand -hex 32` to generate secure secrets.
 
-### 3. Launch The Factory
 
-```bash
-docker-compose up --build -d
-```
-The `--build` flag is only needed the first time or after changing a `Dockerfile`. The `-d` flag runs the containers in detached mode.
+Now, open the .env file and provide values for all variables. Use openssl rand -hex 32 to generate secure secrets.
 
-### 4. ✅ Verify
+3. Launch The Factory
 
-Once the containers are up, your services should be available at the local domains configured in Traefik:
+We use a Makefile to simplify common commands.
 
--   **Website (Next.js):** `http://frontend.localhost`
--   **Admin Panel (Payload):** `http://payload.localhost:3000`
--   **Automation (n8n):** `http://n8n.localhost:5678`
--   **Analytics (Metabase):** `http://metabase.localhost:3001`
--   **Monitoring (Uptime Kuma):** `http://kuma.localhost:3002`
+Generated bash
+# Build and launch all services in detached mode.
+make up
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+Bash
+IGNORE_WHEN_COPYING_END
 
-## 🤝 How to Contribute
+This single command reads the docker-compose.yml file and starts all services.
 
-We are building this in the open and welcome all contributions. To maintain quality and velocity, we operate on a clear set of principles.
+4. Accessing Services
 
-### Our Engineering Philosophy
+Once the containers are up, Traefik will route traffic to your services.
 
-1.  🏍️ **Build Motorcycles, Don't Reinvent Wheels:** 90% of our work is integrating the best open-source tools. 10% is the "glue" that makes them a cohesive system.
-2.  🛠️ **One Toolchain:** We standardize on VS Code. Use the recommended extensions and settings in the `.vscode/` directory to ensure consistency.
-3.  🤖 **AI is Your Copilot:** Mastery of AI-assistants (GitHub Copilot, Cursor) is required. You are the architect; AI is your junior engineer.
-4.  🎯 **Code is Trash Without Tests & Docs:** Our **Definition of Done** is sacred: **Working Code + Automated Tests + Continuous Documentation**.
-5.  🏗️ **Architecture > Elegant Code:** A simple, working piece of code in a brilliant architecture is infinitely more valuable than a complex, elegant function that solves a local problem.
-6.  💬 **Async Communication, Clean Commits:** We protect our state of flow. Formulate your thoughts fully in writing. Your git commits must be clean and descriptive (`feat(payload): ...`).
-7.  🛡️ **Radical Ownership:** "It worked on my machine" is not an excuse. You are responsible for your code from your editor to production.
+Traefik Dashboard (Source of Truth): http://localhost:8080
 
-### Your First Pull Request
+By default, you should find the following services running:
 
-1.  **Fork** the repository.
-2.  Find an issue to work on (we recommend one tagged `good first issue`). Announce in the issue comments that you are taking it.
-3.  Create a new branch for your feature: `git checkout -b feat/my-awesome-feature`.
-4.  Write your code, following the philosophy above. Add tests and update documentation as you go.
-5.  Ensure all tests and linting checks pass locally.
-6.  Submit a **Pull Request (PR)** to our `main` branch. Link the issue you're solving in the PR description (e.g., "Closes #123").
+Website (Next.js): http://frontend.localhost
 
-If your PR adheres to our principles, it will be merged. If not, we'll provide feedback. No hard feelings.
+Admin Panel (Payload): http://payload.localhost
 
-## 📜 License
+Automation (n8n): http://n8n.localhost
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+Analytics (Metabase): http://metabase.localhost
+
+Useful Commands
+Command	Description
+make up	Starts all services.
+make down	Stops and removes all services and volumes.
+make logs	Tails the logs for all running services.
+make test	Runs all unit and integration tests in the monorepo.
+make shell	Opens a bash shell inside the Payload CMS container.
+🏗️ Project Structure Overview
+
+This repository is a Turborepo monorepo. Here is a map of the key directories:
+
+.github/: CI/CD workflows for GitHub Actions.
+
+.vscode/: Recommended VS Code/Cursor settings and extensions to standardize the dev environment.
+
+apps/: Contains the individual applications of our stack (Frontend, Payload, AI-Service).
+
+database/: Manages database state, including migrations and seed scripts.
+
+docs/: High-level architectural documentation, diagrams, and decisions (ADRs).
+
+packages/: Shared code used by multiple applications (e.g., a crypto library, shared UI components).
+
+prompts/: A library of vetted, high-quality prompts for generating code with Cursor.
+
+scripts/: Automation scripts for project initialization (init-project.sh) and updates.
+
+Makefile: Shortcuts for common development commands.
+
+🤝 How to Contribute
+
+We operate on a clear set of principles. Adherence is not optional.
+
+Our Engineering Philosophy
+
+🏍️ Build Motorcycles, Don't Reinvent Wheels: 90% of our work is integrating the best open-source tools. 10% is the "glue" that makes them a cohesive system.
+
+🤖 AI is Your Mandatory Copilot: Mastery of Cursor is required. You are the architect; AI is your junior engineer. Use our /prompts library.
+
+🎯 DoD is Sacred: Our Definition of Done is Working Code + Automated Tests + Continuous Documentation. No exceptions.
+
+🏗️ Architecture > Elegant Code: A simple, working function in a brilliant architecture is infinitely more valuable than a complex function that solves a local problem.
+
+🛡️ Respect the Boundaries: Code within the apps/payload/src/collections/premium/ directory is proprietary and must not be modified in public pull requests without explicit permission.
+
+💬 Async Communication, Clean Commits: Formulate your thoughts fully in writing. Your git commits must be clean and descriptive (feat(payload): ...).
+
+🔥 Radical Ownership: "It worked on my machine" is not an excuse. You are responsible for your code from your editor to production.
+
+Your First Pull Request
+
+Fork the repository.
+
+Find an issue to work on (we recommend one tagged good first issue). Announce that you are taking it.
+
+Create a new branch: git checkout -b feat/my-awesome-feature.
+
+Write your code, add tests, and update documentation.
+
+Ensure all checks pass locally: make test and make lint.
+
+Submit a Pull Request (PR) to our main branch, linking the issue you're solving.
+
+We will review it based on these principles.
+
+©️ Licenses
+
+This project utilizes a dual-license model. The core framework is licensed under the MIT License, while premium modules are under a separate Commercial License. See the Licensing Model section above for details.

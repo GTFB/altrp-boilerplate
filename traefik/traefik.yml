@@ -1,0 +1,28 @@
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+# Logging configuration
+log:
+  level: INFO # (DEBUG, INFO, WARN, ERROR)
+  
+# API and Dashboard configuration
+api:
+  dashboard: true
+  insecure: true # Enable dashboard without auth (FOR LOCAL DEVELOPMENT ONLY)
+
+# Entrypoints (ports)
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+    
+# Configuration providers
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false # Security: explicitly enable services instead of exposing by default
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true

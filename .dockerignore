@@ -1,0 +1,36 @@
+# Docker-specific files
+Dockerfile
+.dockerignore
+docker-compose.yml
+docker-compose.prod.yml
+
+# Node dependencies
+node_modules
+.pnpm-store
+
+# Git
+.git
+.gitignore
+
+# Secrets - NEVER include these in a build
+.env
+.env.*
+*.env.local
+
+# Turborepo cache
+.turbo
+
+# IDE and OS files
+.vscode
+.idea
+.DS_Store
+
+# Build artifacts (handled by multi-stage build, but good to ignore)
+dist
+build
+.next
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
