@@ -4,7 +4,6 @@ import path from 'path'
 
 // Load environment variables from .env file with explicit path
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') })
-console.log(process.env)
 
 import sharp from 'sharp' // sharp-import
 import { buildConfig, PayloadRequest } from 'payload'
@@ -23,6 +22,7 @@ import { getServerSideURL } from './utilities/getURL'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
 export default buildConfig({
   admin: {
     components: {

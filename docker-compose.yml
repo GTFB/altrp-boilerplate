@@ -17,6 +17,7 @@ services:
   postgres:
     image: postgres:15-alpine
     restart: unless-stopped
+    
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -25,6 +26,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - altrp_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # 3. Cache
   keydb:
@@ -40,10 +46,16 @@ services:
     build:
       context: .
       dockerfile: apps/payload/Dockerfile
+      args:
+        PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+        DATABASE_URI: ${DATABASE_URI}
+        NODE_ENV: production
     restart: unless-stopped
     depends_on:
-      - postgres
-      - keydb
+      postgres:
+        condition: service_healthy
+      keydb:
+        condition: service_started
     environment:
       DATABASE_URI: ${DATABASE_URI}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET}
