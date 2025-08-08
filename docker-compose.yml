@@ -58,23 +58,23 @@ services:
       - altrp_network
 
   # 5. Frontend
-  # frontend:
-  #   build:
-  #     context: .
-  #     dockerfile: apps/frontend/Dockerfile
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - payload
-  #   environment:
-  #     # Important: frontend communicates with backend using the service name inside Docker
-  #     NEXT_PUBLIC_SERVER_URL: http://payload:3000
-  #     NODE_ENV: production
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.frontend.rule=Host(`${PROJECT_DOMAIN}`)"
-  #     - "traefik.http.services.frontend.loadbalancer.server.port=3000"
-  #   networks:
-  #     - altrp_network
+#  frontend:
+#    build:
+#      context: .
+#      dockerfile: apps/frontend/Dockerfile
+#    restart: unless-stopped
+#    depends_on:
+#       - payload
+#    environment:
+#      # Important: frontend communicates with backend using the service name inside Docker
+#      NEXT_PUBLIC_SERVER_URL: http://payload:3000
+#      NODE_ENV: production
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.frontend.rule=Host(`${PROJECT_DOMAIN}`)"
+#      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+#    networks:
+#      - altrp_network
 
   # 6. Automation
   n8n:

@@ -16,7 +16,7 @@ WORKDIR /app
 COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/package-lock.json ./package-lock.json
 # Install dependencies
-RUN npm install
+RUN npm ci
 
 # 4. Builder Stage: Build the application
 FROM base AS builder
@@ -27,6 +27,7 @@ COPY --from=installer /app/ .
 COPY --from=pruner /app/out/full/ .
 # Copy turbo.json for Turborepo configuration
 COPY --from=pruner /app/turbo.json ./turbo.json
+COPY .env  .env
 # Now, the workspace is complete. Run the build.
 RUN npm run build -- --filter=payload
 
@@ -41,7 +42,7 @@ COPY --from=builder /app/apps/payload/package.json .
 COPY --from=builder /app/apps/payload/dist ./dist
 COPY --from=builder /app/apps/payload/build ./build
 # We must copy the entire node_modules from the builder, as it contains all workspace dependencies
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/node_modules ./node_modules
 
 USER nextjs
 EXPOSE 3000

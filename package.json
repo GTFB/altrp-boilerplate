@@ -5,24 +5,28 @@
     "private": true,
     "packageManager": "npm@10.8.2",
     "scripts": {
-      "build": "turbo run build",
-      "dev": "turbo run dev",
-      "lint": "turbo run lint",
-      "test": "turbo run test",
-      "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-      "setup": "cd scripts && bash setup.sh -d altrp.localhost",
-      "docker:up": "docker compose up --build -d",
-      "docker:down": "docker compose down -v",
-      "docker:logs": "docker compose logs -f"
+        "build": "turbo run build",
+        "dev": "turbo run dev",
+        "lint": "turbo run lint",
+        "test": "turbo run test",
+        "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+        "setup": "cd scripts && bash setup.sh -d altrp.localhost",
+        "docker:up": "docker compose up --build -d",
+        "docker:down": "docker compose down -v",
+        "docker:logs": "docker compose logs -f"
     },
     "workspaces": [
-      "apps/*",
-      "packages/*"
+        "apps/*",
+        "packages/*"
     ],
     "devDependencies": {
-      "prettier": "^3.2.5",
-      "turbo": "^2.0.6"
+        "prettier": "^3.2.5",
+        "turbo": "^2.0.6"
     },
     "author": "Altrp.io",
-    "license": "MIT"
-  }
+    "license": "MIT",
+    "dependencies": {
+        "lucide-react": "^0.537.0",
+        "react-hook-form": "^7.62.0"
+    }
+}

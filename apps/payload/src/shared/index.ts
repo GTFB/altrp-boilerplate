@@ -1,8 +1,5 @@
-// Shared utilities and types for Payload CMS
-// This file is referenced by payload/shared import
-
-export * from './types.js'
-export * from './utils.js'
-
-// Explicitly export main functions that Payload CMS expects
-export { formatAdminURL, text } from './utils.js'
+// Minimal payload/shared implementation
+export const formatAdminURL = (path: string): string => {
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path
+  return `/admin/${cleanPath}`
+}

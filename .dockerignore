@@ -13,9 +13,6 @@ node_modules
 .gitignore
 
 # Secrets - NEVER include these in a build
-.env
-.env.*
-*.env.local
 
 # Turborepo cache
 .turbo

@@ -33,12 +33,14 @@ FROM base AS runner
 WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-# Copy required files from the builder stage
-COPY --from=builder /app/apps/frontend/public ./apps/frontend/public
+
+# Copy the standalone build
 COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/static ./apps/frontend/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/.next/static ./.next/static
 
 USER nextjs
 EXPOSE 3000
 ENV PORT 3000
-CMD ["node", "apps/frontend/server.js"]
+ENV NODE_ENV production
+
+CMD ["node", "server.js"]
