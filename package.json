@@ -13,7 +13,8 @@
         "setup": "cd scripts && bash setup.sh -d altrp.localhost",
         "docker:up": "docker compose up --build -d",
         "docker:down": "docker compose down -v",
-        "docker:logs": "docker compose logs -f"
+        "docker:logs": "docker compose logs -f",
+        "dev:payload": "npm i && npm run dev -- --filter=payload"
     },
     "workspaces": [
         "apps/*",

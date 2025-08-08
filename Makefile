@@ -41,6 +41,25 @@ shell: ## Open a bash shell inside the Payload CMS container
 	docker compose exec payload bash
 
 # Monorepo Commands
+install: ## Install all npm dependencies
+	@echo "📦 Installing npm dependencies..."
+	npm install
+
+dev: ## Start Payload CMS in development mode
+	@echo "🔧 Starting Payload CMS in development mode..."
+	@echo "📝 Checking .env file..."
+	@if [ ! -f .env ]; then \
+		echo "📝 .env file not found, generating with domain: $(if $(DOMAIN),$(DOMAIN),altrp.localhost)"; \
+		cd scripts && ./setup.sh -d $(if $(DOMAIN),$(DOMAIN),altrp.localhost); \
+		cd ..; \
+	else \
+		echo "✅ .env file already exists"; \
+	fi
+	@echo "🚀 Starting development server..."
+	npm run dev -- --filter=payload
+
+dev-setup: install dev ## Install dependencies and start development server
+
 test: ## Run all tests in the monorepo
 	@echo "🧪 Running tests..."
 	npm run test

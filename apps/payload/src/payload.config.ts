@@ -3,7 +3,6 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import path from 'path'
 
 // Load environment variables from .env file with explicit path
-dotenv.config({ path: path.resolve(__dirname, '../../../.env') })
 
 import sharp from 'sharp' // sharp-import
 import { buildConfig, PayloadRequest } from 'payload'

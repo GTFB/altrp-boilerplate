@@ -42,6 +42,28 @@ services:
       - altrp_network
 
   # 4. Backend / CMS
+  payload-init:
+    image: postgres:15-alpine
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      sh -c "
+        echo 'Waiting for database to be fully ready...' &&
+        until pg_isready -h postgres -U ${POSTGRES_USER} -d ${POSTGRES_DB}; do
+          echo 'Database is not ready yet, waiting...' &&
+          sleep 5
+        done &&
+        echo 'Database is ready for payload application'
+      "
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - altrp_network
+
   payload:
     build:
       context: .
@@ -52,16 +74,20 @@ services:
         NODE_ENV: production
     restart: unless-stopped
     depends_on:
-      postgres:
-        condition: service_healthy
+      payload-init:
+        condition: service_completed_successfully
       keydb:
         condition: service_started
     environment:
       DATABASE_URI: ${DATABASE_URI}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET}
       NODE_ENV: production
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./media:/app/media # Mount the media volume for uploads
+      - ./apps/payload:/app/apps/payload # Mount source code for development
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.payload.rule=Host(`payload.${PROJECT_DOMAIN}`)"
