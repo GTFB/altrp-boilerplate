@@ -14,20 +14,14 @@ echo "Database is ready!"
 # Initialize Payload CMS first (create tables, etc.)
 echo "Initializing Payload CMS..."
 cd /app/apps/payload
-npx payload migrate:create
-npx payload migrate
+# Run migrations under Bun runtime
+bun x payload migrate:create
+bun x payload migrate
 
-# Check if build is needed - check for actual build files, not just directory
-if [ ! -d "/app/apps/payload/.next" ] || [ ! -f "/app/apps/payload/.next/BUILD_ID" ]; then
-  echo "Build directory not found or incomplete, starting build..."
-  cd /app/apps/payload
-  npm run build
-  echo "Build completed!"
-else
-  echo "Build directory exists and appears complete, skipping build..."
-fi
+# Build is done during Docker build stage; skip any build here
+echo "Build already present from image build stage; skipping build."
 
 # Start the application
-echo "Starting application..."
+echo "Starting application with Bun runtime..."
 cd /app/apps/payload
-npm start
+bun x next start
