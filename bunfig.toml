@@ -1,0 +1,18 @@
+[install]
+# Use workspaces
+workspaces = true
+
+# Caching for faster installation
+cache = true
+
+[install.scopes]
+# Settings for monorepo
+monorepo = true
+
+[test]
+# Test settings
+preload = ["./vitest.setup.ts"]
+
+[run]
+# Script execution settings
+bun = true

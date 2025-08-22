@@ -21,6 +21,9 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 
+/**
+ * @description Page entity for storing website pages with content blocks and SEO metadata
+ */
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
   access: {
@@ -31,13 +34,13 @@ export const Pages: CollectionConfig<'pages'> = {
   },
   // This config controls what's populated by default when a page is referenced
   // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
-  // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'pages'>
+  // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'pages'>`
   defaultPopulate: {
     title: true,
     slug: true,
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'updatedAt'],
+    defaultColumns: ['aid', 'title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
@@ -59,9 +62,43 @@ export const Pages: CollectionConfig<'pages'> = {
   },
   fields: [
     {
+      name: 'aid',
+      type: 'text',
+      required: true,
+      unique: true,
+      admin: {
+        description: 'Unique Alternative Identifier (AID)',
+      },
+      db: {
+        type: 'aid',
+      },
+      hooks: {
+        beforeValidate: [
+          /**
+           * Generates AID before document validation
+           */
+          ({ data }) => {
+            if (!data.aid) {
+              // Generate AID in format: P-XXXXXX (P for Page)
+              const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+              let result = 'P-'
+              for (let i = 0; i < 6; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length))
+              }
+              data.aid = result
+            }
+            return data
+          },
+        ],
+      },
+    },
+    {
       name: 'title',
       type: 'text',
       required: true,
+      admin: {
+        description: 'Page title',
+      },
     },
     {
       type: 'tabs',
@@ -79,6 +116,7 @@ export const Pages: CollectionConfig<'pages'> = {
               required: true,
               admin: {
                 initCollapsed: true,
+                description: 'Content blocks for the page layout',
               },
             },
           ],
@@ -118,6 +156,7 @@ export const Pages: CollectionConfig<'pages'> = {
       type: 'date',
       admin: {
         position: 'sidebar',
+        description: 'Publication date for the page',
       },
     },
     ...slugField(),

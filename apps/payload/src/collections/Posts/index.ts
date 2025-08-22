@@ -27,6 +27,9 @@ import {
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
 
+/**
+ * @description Post entity for storing blog posts and articles with rich content
+ */
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
   access: {
@@ -37,7 +40,7 @@ export const Posts: CollectionConfig<'posts'> = {
   },
   // This config controls what's populated by default when a post is referenced
   // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
-  // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'posts'>
+  // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'posts'>`
   defaultPopulate: {
     title: true,
     slug: true,
@@ -48,7 +51,7 @@ export const Posts: CollectionConfig<'posts'> = {
     },
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'updatedAt'],
+    defaultColumns: ['aid', 'title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
@@ -70,9 +73,43 @@ export const Posts: CollectionConfig<'posts'> = {
   },
   fields: [
     {
+      name: 'aid',
+      type: 'text',
+      required: true,
+      unique: true,
+      admin: {
+        description: 'Unique Alternative Identifier (AID)',
+      },
+      db: {
+        type: 'aid',
+      },
+      hooks: {
+        beforeValidate: [
+          /**
+           * Generates AID before document validation
+           */
+          ({ data }) => {
+            if (!data.aid) {
+              // Generate AID in format: P-XXXXXX (P for Post)
+              const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+              let result = 'P-'
+              for (let i = 0; i < 6; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length))
+              }
+              data.aid = result
+            }
+            return data
+          },
+        ],
+      },
+    },
+    {
       name: 'title',
       type: 'text',
       required: true,
+      admin: {
+        description: 'Post title',
+      },
     },
     {
       type: 'tabs',
@@ -83,10 +120,16 @@ export const Posts: CollectionConfig<'posts'> = {
               name: 'heroImage',
               type: 'upload',
               relationTo: 'media',
+              admin: {
+                description: 'Hero image for the post',
+              },
             },
             {
               name: 'content',
               type: 'richText',
+              admin: {
+                description: 'Rich text content of the post',
+              },
               editor: lexicalEditor({
                 features: ({ rootFeatures }) => {
                   return [
@@ -112,6 +155,7 @@ export const Posts: CollectionConfig<'posts'> = {
               type: 'relationship',
               admin: {
                 position: 'sidebar',
+                description: 'Related posts for this post',
               },
               filterOptions: ({ id }) => {
                 return {
@@ -128,6 +172,7 @@ export const Posts: CollectionConfig<'posts'> = {
               type: 'relationship',
               admin: {
                 position: 'sidebar',
+                description: 'Categories for this post',
               },
               hasMany: true,
               relationTo: 'categories',
@@ -172,9 +217,13 @@ export const Posts: CollectionConfig<'posts'> = {
           pickerAppearance: 'dayAndTime',
         },
         position: 'sidebar',
+        description: 'Publication date for the post',
       },
       hooks: {
         beforeChange: [
+          /**
+           * Sets publication date when post is published
+           */
           ({ siblingData, value }) => {
             if (siblingData._status === 'published' && !value) {
               return new Date()
@@ -189,6 +238,7 @@ export const Posts: CollectionConfig<'posts'> = {
       type: 'relationship',
       admin: {
         position: 'sidebar',
+        description: 'Authors of the post',
       },
       hasMany: true,
       relationTo: 'users',
@@ -205,6 +255,7 @@ export const Posts: CollectionConfig<'posts'> = {
       admin: {
         disabled: true,
         readOnly: true,
+        description: 'Populated author data (read-only)',
       },
       fields: [
         {

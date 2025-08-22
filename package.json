@@ -3,26 +3,25 @@
     "version": "1.0.0",
     "description": "The Altrp Digital Asset Factory",
     "private": true,
-    "packageManager": "npm@10.8.2",
+    "packageManager": "bun@1.0.0",
     "scripts": {
-        "build": "turbo run build",
-        "dev": "turbo run dev",
-        "lint": "turbo run lint",
-        "test": "turbo run test",
+        "build": "bun run --cwd apps/payload build",
+        "dev": "bun run --cwd apps/payload dev",
+        "lint": "bun run --cwd apps/payload lint",
+        "test": "bun run --cwd apps/payload test",
         "format": "prettier --write \"**/*.{ts,tsx,md}\"",
         "setup": "cd scripts && bash setup.sh -d altrp.localhost",
         "docker:up": "docker compose up --build -d",
         "docker:down": "docker compose down -v",
         "docker:logs": "docker compose logs -f",
-        "dev:payload": "npm i && npm run dev -- --filter=payload"
+        "dev:payload": "bun install && bun run --cwd apps/payload dev"
     },
     "workspaces": [
         "apps/*",
         "packages/*"
     ],
     "devDependencies": {
-        "prettier": "^3.2.5",
-        "turbo": "^2.0.6"
+        "prettier": "^3.2.5"
     },
     "author": "Altrp.io",
     "license": "MIT",

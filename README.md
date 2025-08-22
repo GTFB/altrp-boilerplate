@@ -25,7 +25,7 @@ We believe in **🔑 Total Ownership**. We don't rent you a storefront; we give 
 -   **🧱 Radical Modularity:** The system is built from independent, battle-tested open-source components (Payload, Next.js, n8n). Add features like E-commerce or CRM by activating modules, not by rewriting your core.
 -   **📜 Dual Licensing for Trust & Value:** A transparent model with a permissive MIT-licensed core engine and commercially licensed premium modules. You own the foundation, you subscribe to the power-ups.
 -   **🛠️ Production-Ready Stack:** Forget weeks of setup. Docker, Traefik, CI/CD, databases, and observability tools are all pre-configured and work in harmony.
--   **❤️ Obsessed with Developer Experience:** We designed this for `vibe-coding`. Monorepo with Turborepo, strict TypeScript, and Architecture-as-Code principles create an environment for deep focus and high velocity.
+-   **❤️ Obsessed with Developer Experience:** We designed this for `vibe-coding`. Monorepo with Bun, strict TypeScript, and Architecture-as-Code principles create an environment for deep focus and high velocity.
 -   **🤖 AI-Native Architecture:** Built with a dedicated, decoupled microservice layer for AI agents and an AI-first development workflow. This isn't a feature; it's in the DNA.
 
 ## 📜 Licensing Model: Own the Core, Subscribe to Power
@@ -51,7 +51,7 @@ This project is standardized on an AI-first workflow.
 -   **Required Editor:** [**Cursor**](https://cursor.sh/). This AI-native editor is mandatory for all contributors.
 -   **System Tools:**
     -   [Docker](https://www.docker.com/products/docker-desktop/) & Docker Compose
-    -   [Node.js](https://nodejs.org/en/) (v18+ recommended)
+    -   [Bun](https://bun.sh/) (v1.0.0+ recommended) - Fast JavaScript runtime and package manager
     -   `make` (On Windows, this is available through Git Bash, which is our recommended terminal).
 
 ### 2. Clone and Configure
@@ -98,6 +98,17 @@ Once the containers are up, Traefik will route traffic to your services.
 | `make down`     | Stops and removes all services and volumes.     |
 | `make logs`     | Tails the logs for all running services.        |
 | `make test`     | Runs all unit and integration tests in the monorepo. |
+
+### Bun Commands
+
+| Command                    | Description                                    |
+| :------------------------- | :--------------------------------------------- |
+| `bun install`              | Install all dependencies in the monorepo       |
+| `bun run dev`              | Start development server for payload app       |
+| `bun run build`            | Build the payload app                          |
+| `bun run test`             | Run all tests                                  |
+| `bun run lint`             | Run linting                                    |
+| `bun run --cwd apps/payload dev` | Start specific app in monorepo              |
 | `make shell`    | Opens a bash shell inside the Payload CMS container. |
 
 ## 🏗️ Project Structure Overview

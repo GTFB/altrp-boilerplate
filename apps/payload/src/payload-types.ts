@@ -72,6 +72,32 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    archives: Archive;
+    bases: Base;
+    contractors: Contractor;
+    deals: Deal;
+    employees: Employee;
+    finances: Finance;
+    goals: Goal;
+    humans: Human;
+    invoices: Invoice;
+    locations: Location;
+    messages: Message;
+    outreaches: Outreach;
+    products: Product;
+    customers: Customer;
+    orders: Order;
+    instances: Instance;
+    modules: Module;
+    licenses: License;
+    qualifications: Qualification;
+    routines: Routine;
+    texts: Text;
+    universities: University;
+    votes: Vote;
+    wallets: Wallet;
+    yards: Yard;
+    zoos: Zoo;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -88,6 +114,32 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    archives: ArchivesSelect<false> | ArchivesSelect<true>;
+    bases: BasesSelect<false> | BasesSelect<true>;
+    contractors: ContractorsSelect<false> | ContractorsSelect<true>;
+    deals: DealsSelect<false> | DealsSelect<true>;
+    employees: EmployeesSelect<false> | EmployeesSelect<true>;
+    finances: FinancesSelect<false> | FinancesSelect<true>;
+    goals: GoalsSelect<false> | GoalsSelect<true>;
+    humans: HumansSelect<false> | HumansSelect<true>;
+    invoices: InvoicesSelect<false> | InvoicesSelect<true>;
+    locations: LocationsSelect<false> | LocationsSelect<true>;
+    messages: MessagesSelect<false> | MessagesSelect<true>;
+    outreaches: OutreachesSelect<false> | OutreachesSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    customers: CustomersSelect<false> | CustomersSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
+    instances: InstancesSelect<false> | InstancesSelect<true>;
+    modules: ModulesSelect<false> | ModulesSelect<true>;
+    licenses: LicensesSelect<false> | LicensesSelect<true>;
+    qualifications: QualificationsSelect<false> | QualificationsSelect<true>;
+    routines: RoutinesSelect<false> | RoutinesSelect<true>;
+    texts: TextsSelect<false> | TextsSelect<true>;
+    universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
+    votes: VotesSelect<false> | VotesSelect<true>;
+    wallets: WalletsSelect<false> | WalletsSelect<true>;
+    yards: YardsSelect<false> | YardsSelect<true>;
+    zoos: ZoosSelect<false> | ZoosSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -98,7 +150,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   globals: {
     header: Header;
@@ -146,7 +198,14 @@ export interface UserAuthOperations {
  * via the `definition` "pages".
  */
 export interface Page {
-  id: string;
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Page title
+   */
   title: string;
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
@@ -173,11 +232,11 @@ export interface Page {
             reference?:
               | ({
                   relationTo: 'pages';
-                  value: string | Page;
+                  value: number | Page;
                 } | null)
               | ({
                   relationTo: 'posts';
-                  value: string | Post;
+                  value: number | Post;
                 } | null);
             url?: string | null;
             label: string;
@@ -189,17 +248,23 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
-    media?: (string | null) | Media;
+    media?: (number | null) | Media;
   };
+  /**
+   * Content blocks for the page layout
+   */
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
   meta?: {
     title?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
     description?: string | null;
   };
+  /**
+   * Publication date for the page
+   */
   publishedAt?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
@@ -212,9 +277,22 @@ export interface Page {
  * via the `definition` "posts".
  */
 export interface Post {
-  id: string;
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Post title
+   */
   title: string;
-  heroImage?: (string | null) | Media;
+  /**
+   * Hero image for the post
+   */
+  heroImage?: (number | null) | Media;
+  /**
+   * Rich text content of the post
+   */
   content: {
     root: {
       type: string;
@@ -230,18 +308,33 @@ export interface Post {
     };
     [k: string]: unknown;
   };
-  relatedPosts?: (string | Post)[] | null;
-  categories?: (string | Category)[] | null;
+  /**
+   * Related posts for this post
+   */
+  relatedPosts?: (number | Post)[] | null;
+  /**
+   * Categories for this post
+   */
+  categories?: (number | Category)[] | null;
   meta?: {
     title?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
     description?: string | null;
   };
+  /**
+   * Publication date for the post
+   */
   publishedAt?: string | null;
-  authors?: (string | User)[] | null;
+  /**
+   * Authors of the post
+   */
+  authors?: (number | User)[] | null;
+  /**
+   * Populated author data (read-only)
+   */
   populatedAuthors?:
     | {
         id?: string | null;
@@ -259,8 +352,18 @@ export interface Post {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Alternative text for accessibility
+   */
   alt?: string | null;
+  /**
+   * Rich text caption for the media
+   */
   caption?: {
     root: {
       type: string;
@@ -351,14 +454,19 @@ export interface Media {
  * via the `definition` "categories".
  */
 export interface Category {
-  id: string;
-  title: string;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  parent?: (string | null) | Category;
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Category title
+   */
+  title?: string | null;
+  parent?: (number | null) | Category;
   breadcrumbs?:
     | {
-        doc?: (string | null) | Category;
+        doc?: (number | null) | Category;
         url?: string | null;
         label?: string | null;
         id?: string | null;
@@ -372,8 +480,7 @@ export interface Category {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
-  name?: string | null;
+  id: number;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -420,11 +527,11 @@ export interface CallToActionBlock {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -470,11 +577,11 @@ export interface ContentBlock {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -495,7 +602,7 @@ export interface ContentBlock {
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  media: string | Media;
+  media: number | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
@@ -522,12 +629,12 @@ export interface ArchiveBlock {
   } | null;
   populateBy?: ('collection' | 'selection') | null;
   relationTo?: 'posts' | null;
-  categories?: (string | Category)[] | null;
+  categories?: (number | Category)[] | null;
   limit?: number | null;
   selectedDocs?:
     | {
         relationTo: 'posts';
-        value: string | Post;
+        value: number | Post;
       }[]
     | null;
   id?: string | null;
@@ -539,7 +646,7 @@ export interface ArchiveBlock {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
-  form: string | Form;
+  form: number | Form;
   enableIntro?: boolean | null;
   introContent?: {
     root: {
@@ -565,7 +672,7 @@ export interface FormBlock {
  * via the `definition` "forms".
  */
 export interface Form {
-  id: string;
+  id: number;
   title: string;
   fields?:
     | (
@@ -736,10 +843,1322 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "archives".
+ */
+export interface Archive {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Archive title
+   */
+  title: string;
+  /**
+   * URL-friendly identifier
+   */
+  slug: string;
+  /**
+   * Archive description
+   */
+  description?: string | null;
+  /**
+   * Rich text content for the archive
+   */
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Current status of the archive
+   */
+  status?: ('draft' | 'published' | 'archived') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bases".
+ */
+export interface Base {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Title of the base entity
+   */
+  title: string;
+  /**
+   * URL-friendly identifier
+   */
+  slug: string;
+  /**
+   * Detailed description of the base entity
+   */
+  description?: string | null;
+  /**
+   * Rich text content for the base entity
+   */
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Current status of the base entity
+   */
+  status?: ('draft' | 'published' | 'archived') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contractors".
+ */
+export interface Contractor {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Contractor full name
+   */
+  name: string;
+  /**
+   * Contractor email address
+   */
+  email: string;
+  /**
+   * Contractor phone number
+   */
+  phone?: string | null;
+  /**
+   * Company name
+   */
+  company?: string | null;
+  /**
+   * Contractor specialization or skills
+   */
+  specialization?: string | null;
+  /**
+   * Detailed description of the contractor
+   */
+  description?: string | null;
+  /**
+   * Current status of the contractor
+   */
+  status?: ('active' | 'inactive' | 'pending') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "deals".
+ */
+export interface Deal {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Deal title or name
+   */
+  title: string;
+  /**
+   * Deal value amount
+   */
+  value: number;
+  /**
+   * Currency for the deal value
+   */
+  currency?: ('usd' | 'eur' | 'rub') | null;
+  /**
+   * Current status of the deal
+   */
+  status?: ('prospecting' | 'qualification' | 'proposal' | 'negotiation' | 'closed_won' | 'closed_lost') | null;
+  /**
+   * Detailed description of the deal
+   */
+  description?: string | null;
+  /**
+   * Expected date when deal will close
+   */
+  expectedCloseDate?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "employees".
+ */
+export interface Employee {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Employee full name
+   */
+  fullName: string;
+  /**
+   * Employee email address
+   */
+  email: string;
+  /**
+   * Employee phone number
+   */
+  phone?: string | null;
+  /**
+   * Employee job position or title
+   */
+  position: string;
+  /**
+   * Employee department
+   */
+  department?: string | null;
+  /**
+   * Date when employee was hired
+   */
+  hireDate?: string | null;
+  /**
+   * Employee salary amount
+   */
+  salary?: number | null;
+  /**
+   * Current employment status
+   */
+  status?: ('active' | 'inactive' | 'on_leave' | 'terminated') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "finances".
+ */
+export interface Finance {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Financial transaction title
+   */
+  title: string;
+  /**
+   * Transaction amount
+   */
+  amount: number;
+  /**
+   * Currency for the transaction
+   */
+  currency?: ('usd' | 'eur' | 'rub') | null;
+  /**
+   * Type of financial transaction
+   */
+  type: 'income' | 'expense' | 'investment' | 'loan';
+  /**
+   * Transaction category
+   */
+  category?: string | null;
+  /**
+   * Detailed description of the transaction
+   */
+  description?: string | null;
+  /**
+   * Transaction date
+   */
+  date: string;
+  /**
+   * Current status of the transaction
+   */
+  status?: ('pending' | 'completed' | 'cancelled') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "goals".
+ */
+export interface Goal {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Goal title or name
+   */
+  title: string;
+  /**
+   * Detailed description of the goal
+   */
+  description?: string | null;
+  /**
+   * Target completion date
+   */
+  targetDate: string;
+  /**
+   * Goal priority level
+   */
+  priority?: ('low' | 'medium' | 'high' | 'critical') | null;
+  /**
+   * Current status of the goal
+   */
+  status?: ('not_started' | 'in_progress' | 'completed' | 'on_hold' | 'cancelled') | null;
+  /**
+   * Progress percentage (0-100)
+   */
+  progress?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "humans".
+ */
+export interface Human {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Person full name
+   */
+  fullName: string;
+  /**
+   * Person email address
+   */
+  email: string;
+  /**
+   * Person phone number
+   */
+  phone?: string | null;
+  /**
+   * Person date of birth
+   */
+  dateOfBirth?: string | null;
+  /**
+   * Person gender
+   */
+  gender?: ('male' | 'female' | 'other' | 'prefer_not_to_say') | null;
+  /**
+   * Person address
+   */
+  address?: string | null;
+  /**
+   * Person biography or description
+   */
+  bio?: string | null;
+  /**
+   * Current status of the person
+   */
+  status?: ('active' | 'inactive' | 'pending') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invoices".
+ */
+export interface Invoice {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Invoice number
+   */
+  invoiceNumber: string;
+  /**
+   * Invoice amount
+   */
+  amount: number;
+  /**
+   * Currency for the invoice
+   */
+  currency?: ('usd' | 'eur' | 'rub') | null;
+  /**
+   * Date when invoice was issued
+   */
+  issueDate: string;
+  /**
+   * Due date for payment
+   */
+  dueDate: string;
+  /**
+   * Current status of the invoice
+   */
+  status?: ('draft' | 'sent' | 'paid' | 'overdue' | 'cancelled') | null;
+  /**
+   * Invoice description or notes
+   */
+  description?: string | null;
+  /**
+   * Client name
+   */
+  clientName: string;
+  /**
+   * Client email address
+   */
+  clientEmail?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations".
+ */
+export interface Location {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Location name
+   */
+  name: string;
+  /**
+   * Type of location
+   */
+  type: 'office' | 'warehouse' | 'store' | 'factory' | 'other';
+  /**
+   * Full address of the location
+   */
+  address: string;
+  /**
+   * City name
+   */
+  city: string;
+  /**
+   * State or province
+   */
+  state?: string | null;
+  /**
+   * Country name
+   */
+  country: string;
+  /**
+   * Postal or ZIP code
+   */
+  postalCode?: string | null;
+  /**
+   * Geographic latitude coordinate
+   */
+  latitude?: number | null;
+  /**
+   * Geographic longitude coordinate
+   */
+  longitude?: number | null;
+  /**
+   * Location description
+   */
+  description?: string | null;
+  /**
+   * Current status of the location
+   */
+  status?: ('active' | 'inactive' | 'under_construction') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "messages".
+ */
+export interface Message {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Message subject line
+   */
+  subject: string;
+  /**
+   * Message content or body
+   */
+  content: string;
+  /**
+   * Message sender
+   */
+  sender: string;
+  /**
+   * Message recipient
+   */
+  recipient: string;
+  /**
+   * Type of message
+   */
+  messageType?: ('email' | 'sms' | 'internal' | 'notification') | null;
+  /**
+   * Message priority level
+   */
+  priority?: ('low' | 'normal' | 'high' | 'urgent') | null;
+  /**
+   * Current status of the message
+   */
+  status?: ('draft' | 'sent' | 'delivered' | 'read' | 'failed') | null;
+  /**
+   * Date when message was sent
+   */
+  sentAt?: string | null;
+  /**
+   * Date when message was read
+   */
+  readAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "outreaches".
+ */
+export interface Outreach {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Outreach campaign title
+   */
+  title: string;
+  /**
+   * Type of outreach campaign
+   */
+  type: 'email_campaign' | 'social_media' | 'direct_mail' | 'phone_call' | 'event' | 'other';
+  /**
+   * Campaign description
+   */
+  description?: string | null;
+  /**
+   * Target audience for the campaign
+   */
+  targetAudience?: string | null;
+  /**
+   * Target date for the campaign
+   */
+  targetDate: string;
+  /**
+   * Campaign budget amount
+   */
+  budget?: number | null;
+  /**
+   * Current status of the campaign
+   */
+  status?: ('planning' | 'in_progress' | 'completed' | 'on_hold' | 'cancelled') | null;
+  /**
+   * Campaign results and outcomes
+   */
+  results?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Product name
+   */
+  name: string;
+  /**
+   * Product description
+   */
+  description?: string | null;
+  /**
+   * Product price
+   */
+  price: number;
+  /**
+   * Currency for the price
+   */
+  currency?: ('usd' | 'eur' | 'rub') | null;
+  /**
+   * Product category
+   */
+  category: string;
+  /**
+   * Stock Keeping Unit
+   */
+  sku?: string | null;
+  /**
+   * Available stock quantity
+   */
+  stock?: number | null;
+  /**
+   * Product weight
+   */
+  weight?: number | null;
+  /**
+   * Product dimensions
+   */
+  dimensions?: {
+    /**
+     * Product length
+     */
+    length?: number | null;
+    /**
+     * Product width
+     */
+    width?: number | null;
+    /**
+     * Product height
+     */
+    height?: number | null;
+  };
+  /**
+   * Current status of the product
+   */
+  status?: ('active' | 'inactive' | 'out_of_stock' | 'discontinued') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers".
+ */
+export interface Customer {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Customer full name or company name
+   */
+  name: string;
+  /**
+   * Primary email address
+   */
+  email?: string | null;
+  /**
+   * Primary phone number
+   */
+  phone?: string | null;
+  type?: ('individual' | 'company') | null;
+  /**
+   * Link to Contractor if customer is represented in CRM
+   */
+  linkedContractor?: (number | null) | Contractor;
+  address?: {
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    region?: string | null;
+    postalCode?: string | null;
+    country?: string | null;
+  };
+  status?: ('active' | 'inactive') | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  customer: number | Customer;
+  items: {
+    product: number | Product;
+    /**
+     * Product name snapshot at order time
+     */
+    nameSnapshot?: string | null;
+    price: number;
+    currency?: ('usd' | 'eur' | 'rub') | null;
+    quantity?: number | null;
+    /**
+     * price * quantity
+     */
+    subtotal?: number | null;
+    id?: string | null;
+  }[];
+  /**
+   * Sum of item subtotals
+   */
+  total?: number | null;
+  status?: ('draft' | 'pending' | 'paid' | 'cancelled' | 'shipped' | 'completed') | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "instances".
+ */
+export interface Instance {
+  id: number;
+  instanceId: string;
+  domain: string;
+  ownerEmail: string;
+  status?: ('active' | 'suspended') | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "modules".
+ */
+export interface Module {
+  id: number;
+  moduleId: string;
+  name: string;
+  description?: string | null;
+  price?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "licenses".
+ */
+export interface License {
+  id: number;
+  project: number | Instance;
+  module: number | Module;
+  licenseKey: string;
+  status?: ('active' | 'expired') | null;
+  expiresAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "qualifications".
+ */
+export interface Qualification {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Qualification title or name
+   */
+  title: string;
+  /**
+   * Type of qualification
+   */
+  type: 'education' | 'certification' | 'license' | 'training' | 'experience';
+  /**
+   * Qualification level
+   */
+  level?: ('beginner' | 'intermediate' | 'advanced' | 'expert') | null;
+  /**
+   * Qualification description
+   */
+  description?: string | null;
+  /**
+   * Organization that issued the qualification
+   */
+  issuingOrganization?: string | null;
+  /**
+   * Date when qualification was issued
+   */
+  issueDate?: string | null;
+  /**
+   * Expiration date of the qualification
+   */
+  expiryDate?: string | null;
+  /**
+   * Credential identification number
+   */
+  credentialId?: string | null;
+  /**
+   * Current status of the qualification
+   */
+  status?: ('active' | 'expired' | 'pending' | 'revoked') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "routines".
+ */
+export interface Routine {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Routine title or name
+   */
+  title: string;
+  /**
+   * Routine description
+   */
+  description?: string | null;
+  /**
+   * Frequency of the routine
+   */
+  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly' | 'custom';
+  /**
+   * Custom frequency description
+   */
+  customFrequency?: string | null;
+  /**
+   * Next due date for the routine
+   */
+  nextDue: string;
+  /**
+   * Date when routine was last completed
+   */
+  lastCompleted?: string | null;
+  /**
+   * Priority level of the routine
+   */
+  priority?: ('low' | 'medium' | 'high' | 'critical') | null;
+  /**
+   * Current status of the routine
+   */
+  status?: ('active' | 'paused' | 'completed' | 'cancelled') | null;
+  /**
+   * Additional notes for the routine
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "texts".
+ */
+export interface Text {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Text title
+   */
+  title: string;
+  /**
+   * Text content
+   */
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Type of text content
+   */
+  type?: ('article' | 'blog_post' | 'documentation' | 'news' | 'story' | 'other') | null;
+  /**
+   * Language of the text
+   */
+  language?: ('en' | 'ru' | 'es' | 'fr' | 'de' | 'other') | null;
+  /**
+   * Text summary or abstract
+   */
+  summary?: string | null;
+  /**
+   * Tags for categorizing the text
+   */
+  tags?:
+    | {
+        /**
+         * Individual tag
+         */
+        tag?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Current status of the text
+   */
+  status?: ('draft' | 'published' | 'archived' | 'under_review') | null;
+  /**
+   * Publication date
+   */
+  publishDate?: string | null;
+  /**
+   * Text author
+   */
+  author?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities".
+ */
+export interface University {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * University name
+   */
+  name: string;
+  /**
+   * Type of university
+   */
+  type?: ('public' | 'private' | 'for_profit' | 'non_profit') | null;
+  /**
+   * Country where university is located
+   */
+  country: string;
+  /**
+   * City where university is located
+   */
+  city: string;
+  /**
+   * University address
+   */
+  address?: string | null;
+  /**
+   * University website URL
+   */
+  website?: string | null;
+  /**
+   * University contact email
+   */
+  email?: string | null;
+  /**
+   * University contact phone
+   */
+  phone?: string | null;
+  /**
+   * Year when university was founded
+   */
+  founded?: number | null;
+  /**
+   * University description
+   */
+  description?: string | null;
+  /**
+   * University accreditation information
+   */
+  accreditation?:
+    | {
+        /**
+         * Accrediting body
+         */
+        body?: string | null;
+        /**
+         * Accreditation date
+         */
+        date?: string | null;
+        /**
+         * Accreditation expiry date
+         */
+        expiry?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Current status of the university
+   */
+  status?: ('active' | 'inactive' | 'under_review' | 'suspended') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "votes".
+ */
+export interface Vote {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Vote title or question
+   */
+  title: string;
+  /**
+   * Vote description
+   */
+  description?: string | null;
+  /**
+   * Type of vote
+   */
+  type: 'election' | 'referendum' | 'survey' | 'poll' | 'other';
+  /**
+   * Vote start date
+   */
+  startDate: string;
+  /**
+   * Vote end date
+   */
+  endDate: string;
+  /**
+   * Voting options
+   */
+  options: {
+    /**
+     * Voting option
+     */
+    option: string;
+    /**
+     * Option description
+     */
+    description?: string | null;
+    id?: string | null;
+  }[];
+  /**
+   * List of eligible voters
+   */
+  eligibleVoters?:
+    | {
+        /**
+         * Eligible voter
+         */
+        voter?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Current status of the vote
+   */
+  status?: ('draft' | 'active' | 'closed' | 'results_published' | 'cancelled') | null;
+  /**
+   * Vote results
+   */
+  results?:
+    | {
+        /**
+         * Voting option
+         */
+        option?: string | null;
+        /**
+         * Number of votes for this option
+         */
+        votes?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wallets".
+ */
+export interface Wallet {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Wallet name
+   */
+  name: string;
+  /**
+   * Type of wallet or account
+   */
+  type: 'bank_account' | 'credit_card' | 'digital_wallet' | 'investment_account' | 'savings_account' | 'other';
+  /**
+   * Current account balance
+   */
+  balance: number;
+  /**
+   * Currency for the wallet
+   */
+  currency?: ('usd' | 'eur' | 'rub' | 'gbp' | 'jpy') | null;
+  /**
+   * Account number
+   */
+  accountNumber?: string | null;
+  /**
+   * Bank name
+   */
+  bankName?: string | null;
+  /**
+   * Bank routing number
+   */
+  routingNumber?: string | null;
+  /**
+   * Wallet description
+   */
+  description?: string | null;
+  /**
+   * Current status of the wallet
+   */
+  status?: ('active' | 'inactive' | 'frozen' | 'closed') | null;
+  /**
+   * Date of last transaction
+   */
+  lastTransaction?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "yards".
+ */
+export interface Yard {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Yard name
+   */
+  name: string;
+  /**
+   * Type of yard
+   */
+  type: 'storage_yard' | 'construction_yard' | 'equipment_yard' | 'parking_yard' | 'garden_yard' | 'other';
+  /**
+   * Yard dimensions
+   */
+  size?: {
+    /**
+     * Yard length in meters
+     */
+    length?: number | null;
+    /**
+     * Yard width in meters
+     */
+    width?: number | null;
+    /**
+     * Yard area in square meters
+     */
+    area?: number | null;
+  };
+  /**
+   * Yard address
+   */
+  address: string;
+  /**
+   * City where yard is located
+   */
+  city: string;
+  /**
+   * Country where yard is located
+   */
+  country: string;
+  /**
+   * Yard description
+   */
+  description?: string | null;
+  /**
+   * Yard features and amenities
+   */
+  features?:
+    | {
+        /**
+         * Individual feature
+         */
+        feature?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Yard capacity in items or vehicles
+   */
+  capacity?: number | null;
+  /**
+   * Current status of the yard
+   */
+  status?: ('active' | 'inactive' | 'under_maintenance' | 'full') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "zoos".
+ */
+export interface Zoo {
+  id: number;
+  /**
+   * Unique Alternative Identifier (AID)
+   */
+  aid: string;
+  /**
+   * Zoo name
+   */
+  name: string;
+  /**
+   * Zoo description
+   */
+  description?: string | null;
+  /**
+   * Country where zoo is located
+   */
+  country: string;
+  /**
+   * City where zoo is located
+   */
+  city: string;
+  /**
+   * Zoo address
+   */
+  address?: string | null;
+  /**
+   * Zoo website URL
+   */
+  website?: string | null;
+  /**
+   * Zoo contact email
+   */
+  email?: string | null;
+  /**
+   * Zoo contact phone
+   */
+  phone?: string | null;
+  /**
+   * Year when zoo was founded
+   */
+  founded?: number | null;
+  /**
+   * Zoo size in hectares
+   */
+  size?: number | null;
+  /**
+   * Annual number of visitors
+   */
+  annualVisitors?: number | null;
+  /**
+   * Animals in the zoo
+   */
+  animals?:
+    | {
+        /**
+         * Animal species
+         */
+        species: string;
+        /**
+         * Number of animals of this species
+         */
+        count?: number | null;
+        /**
+         * Exhibit where animals are located
+         */
+        exhibit?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Zoo exhibits
+   */
+  exhibits?:
+    | {
+        /**
+         * Exhibit name
+         */
+        name?: string | null;
+        /**
+         * Exhibit description
+         */
+        description?: string | null;
+        /**
+         * Exhibit size in square meters
+         */
+        size?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Current status of the zoo
+   */
+  status?: ('open' | 'closed' | 'under_renovation' | 'seasonal') | null;
+  /**
+   * Zoo opening hours
+   */
+  openingHours?: {
+    /**
+     * Monday opening hours
+     */
+    monday?: string | null;
+    /**
+     * Tuesday opening hours
+     */
+    tuesday?: string | null;
+    /**
+     * Wednesday opening hours
+     */
+    wednesday?: string | null;
+    /**
+     * Thursday opening hours
+     */
+    thursday?: string | null;
+    /**
+     * Friday opening hours
+     */
+    friday?: string | null;
+    /**
+     * Saturday opening hours
+     */
+    saturday?: string | null;
+    /**
+     * Sunday opening hours
+     */
+    sunday?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
-  id: string;
+  id: number;
   /**
    * You will need to rebuild the website when changing this field.
    */
@@ -749,11 +2168,11 @@ export interface Redirect {
     reference?:
       | ({
           relationTo: 'pages';
-          value: string | Page;
+          value: number | Page;
         } | null)
       | ({
           relationTo: 'posts';
-          value: string | Post;
+          value: number | Post;
         } | null);
     url?: string | null;
   };
@@ -765,8 +2184,8 @@ export interface Redirect {
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
-  id: string;
-  form: string | Form;
+  id: number;
+  form: number | Form;
   submissionData?:
     | {
         field: string;
@@ -784,18 +2203,18 @@ export interface FormSubmission {
  * via the `definition` "search".
  */
 export interface Search {
-  id: string;
+  id: number;
   title?: string | null;
   priority?: number | null;
   doc: {
     relationTo: 'posts';
-    value: string | Post;
+    value: number | Post;
   };
   slug?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
   };
   categories?:
     | {
@@ -813,7 +2232,7 @@ export interface Search {
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
-  id: string;
+  id: number;
   /**
    * Input data provided to the job
    */
@@ -905,52 +2324,156 @@ export interface PayloadJob {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'pages';
-        value: string | Page;
+        value: number | Page;
       } | null)
     | ({
         relationTo: 'posts';
-        value: string | Post;
+        value: number | Post;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
       } | null)
     | ({
         relationTo: 'categories';
-        value: string | Category;
+        value: number | Category;
       } | null)
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
+      } | null)
+    | ({
+        relationTo: 'archives';
+        value: number | Archive;
+      } | null)
+    | ({
+        relationTo: 'bases';
+        value: number | Base;
+      } | null)
+    | ({
+        relationTo: 'contractors';
+        value: number | Contractor;
+      } | null)
+    | ({
+        relationTo: 'deals';
+        value: number | Deal;
+      } | null)
+    | ({
+        relationTo: 'employees';
+        value: number | Employee;
+      } | null)
+    | ({
+        relationTo: 'finances';
+        value: number | Finance;
+      } | null)
+    | ({
+        relationTo: 'goals';
+        value: number | Goal;
+      } | null)
+    | ({
+        relationTo: 'humans';
+        value: number | Human;
+      } | null)
+    | ({
+        relationTo: 'invoices';
+        value: number | Invoice;
+      } | null)
+    | ({
+        relationTo: 'locations';
+        value: number | Location;
+      } | null)
+    | ({
+        relationTo: 'messages';
+        value: number | Message;
+      } | null)
+    | ({
+        relationTo: 'outreaches';
+        value: number | Outreach;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'customers';
+        value: number | Customer;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: number | Order;
+      } | null)
+    | ({
+        relationTo: 'instances';
+        value: number | Instance;
+      } | null)
+    | ({
+        relationTo: 'modules';
+        value: number | Module;
+      } | null)
+    | ({
+        relationTo: 'licenses';
+        value: number | License;
+      } | null)
+    | ({
+        relationTo: 'qualifications';
+        value: number | Qualification;
+      } | null)
+    | ({
+        relationTo: 'routines';
+        value: number | Routine;
+      } | null)
+    | ({
+        relationTo: 'texts';
+        value: number | Text;
+      } | null)
+    | ({
+        relationTo: 'universities';
+        value: number | University;
+      } | null)
+    | ({
+        relationTo: 'votes';
+        value: number | Vote;
+      } | null)
+    | ({
+        relationTo: 'wallets';
+        value: number | Wallet;
+      } | null)
+    | ({
+        relationTo: 'yards';
+        value: number | Yard;
+      } | null)
+    | ({
+        relationTo: 'zoos';
+        value: number | Zoo;
       } | null)
     | ({
         relationTo: 'redirects';
-        value: string | Redirect;
+        value: number | Redirect;
       } | null)
     | ({
         relationTo: 'forms';
-        value: string | Form;
+        value: number | Form;
       } | null)
     | ({
         relationTo: 'form-submissions';
-        value: string | FormSubmission;
+        value: number | FormSubmission;
       } | null)
     | ({
         relationTo: 'search';
-        value: string | Search;
+        value: number | Search;
       } | null)
     | ({
         relationTo: 'payload-jobs';
-        value: string | PayloadJob;
+        value: number | PayloadJob;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -960,10 +2483,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -983,7 +2506,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -994,6 +2517,7 @@ export interface PayloadMigration {
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
+  aid?: T;
   title?: T;
   hero?:
     | T
@@ -1129,6 +2653,7 @@ export interface FormBlockSelect<T extends boolean = true> {
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
+  aid?: T;
   title?: T;
   heroImage?: T;
   content?: T;
@@ -1160,6 +2685,7 @@ export interface PostsSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
+  aid?: T;
   alt?: T;
   caption?: T;
   updatedAt?: T;
@@ -1253,9 +2779,8 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "categories_select".
  */
 export interface CategoriesSelect<T extends boolean = true> {
+  aid?: T;
   title?: T;
-  slug?: T;
-  slugLock?: T;
   parent?: T;
   breadcrumbs?:
     | T
@@ -1273,7 +2798,6 @@ export interface CategoriesSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  name?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -1290,6 +2814,536 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "archives_select".
+ */
+export interface ArchivesSelect<T extends boolean = true> {
+  aid?: T;
+  title?: T;
+  slug?: T;
+  description?: T;
+  content?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bases_select".
+ */
+export interface BasesSelect<T extends boolean = true> {
+  aid?: T;
+  title?: T;
+  slug?: T;
+  description?: T;
+  content?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contractors_select".
+ */
+export interface ContractorsSelect<T extends boolean = true> {
+  aid?: T;
+  name?: T;
+  email?: T;
+  phone?: T;
+  company?: T;
+  specialization?: T;
+  description?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "deals_select".
+ */
+export interface DealsSelect<T extends boolean = true> {
+  aid?: T;
+  title?: T;
+  value?: T;
+  currency?: T;
+  status?: T;
+  description?: T;
+  expectedCloseDate?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "employees_select".
+ */
+export interface EmployeesSelect<T extends boolean = true> {
+  aid?: T;
+  fullName?: T;
+  email?: T;
+  phone?: T;
+  position?: T;
+  department?: T;
+  hireDate?: T;
+  salary?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "finances_select".
+ */
+export interface FinancesSelect<T extends boolean = true> {
+  aid?: T;
+  title?: T;
+  amount?: T;
+  currency?: T;
+  type?: T;
+  category?: T;
+  description?: T;
+  date?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "goals_select".
+ */
+export interface GoalsSelect<T extends boolean = true> {
+  aid?: T;
+  title?: T;
+  description?: T;
+  targetDate?: T;
+  priority?: T;
+  status?: T;
+  progress?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "humans_select".
+ */
+export interface HumansSelect<T extends boolean = true> {
+  aid?: T;
+  fullName?: T;
+  email?: T;
+  phone?: T;
+  dateOfBirth?: T;
+  gender?: T;
+  address?: T;
+  bio?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invoices_select".
+ */
+export interface InvoicesSelect<T extends boolean = true> {
+  aid?: T;
+  invoiceNumber?: T;
+  amount?: T;
+  currency?: T;
+  issueDate?: T;
+  dueDate?: T;
+  status?: T;
+  description?: T;
+  clientName?: T;
+  clientEmail?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations_select".
+ */
+export interface LocationsSelect<T extends boolean = true> {
+  aid?: T;
+  name?: T;
+  type?: T;
+  address?: T;
+  city?: T;
+  state?: T;
+  country?: T;
+  postalCode?: T;
+  latitude?: T;
+  longitude?: T;
+  description?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "messages_select".
+ */
+export interface MessagesSelect<T extends boolean = true> {
+  aid?: T;
+  subject?: T;
+  content?: T;
+  sender?: T;
+  recipient?: T;
+  messageType?: T;
+  priority?: T;
+  status?: T;
+  sentAt?: T;
+  readAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "outreaches_select".
+ */
+export interface OutreachesSelect<T extends boolean = true> {
+  aid?: T;
+  title?: T;
+  type?: T;
+  description?: T;
+  targetAudience?: T;
+  targetDate?: T;
+  budget?: T;
+  status?: T;
+  results?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  aid?: T;
+  name?: T;
+  description?: T;
+  price?: T;
+  currency?: T;
+  category?: T;
+  sku?: T;
+  stock?: T;
+  weight?: T;
+  dimensions?:
+    | T
+    | {
+        length?: T;
+        width?: T;
+        height?: T;
+      };
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers_select".
+ */
+export interface CustomersSelect<T extends boolean = true> {
+  aid?: T;
+  name?: T;
+  email?: T;
+  phone?: T;
+  type?: T;
+  linkedContractor?: T;
+  address?:
+    | T
+    | {
+        line1?: T;
+        line2?: T;
+        city?: T;
+        region?: T;
+        postalCode?: T;
+        country?: T;
+      };
+  status?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  aid?: T;
+  customer?: T;
+  items?:
+    | T
+    | {
+        product?: T;
+        nameSnapshot?: T;
+        price?: T;
+        currency?: T;
+        quantity?: T;
+        subtotal?: T;
+        id?: T;
+      };
+  total?: T;
+  status?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "instances_select".
+ */
+export interface InstancesSelect<T extends boolean = true> {
+  instanceId?: T;
+  domain?: T;
+  ownerEmail?: T;
+  status?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "modules_select".
+ */
+export interface ModulesSelect<T extends boolean = true> {
+  moduleId?: T;
+  name?: T;
+  description?: T;
+  price?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "licenses_select".
+ */
+export interface LicensesSelect<T extends boolean = true> {
+  project?: T;
+  module?: T;
+  licenseKey?: T;
+  status?: T;
+  expiresAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "qualifications_select".
+ */
+export interface QualificationsSelect<T extends boolean = true> {
+  aid?: T;
+  title?: T;
+  type?: T;
+  level?: T;
+  description?: T;
+  issuingOrganization?: T;
+  issueDate?: T;
+  expiryDate?: T;
+  credentialId?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "routines_select".
+ */
+export interface RoutinesSelect<T extends boolean = true> {
+  aid?: T;
+  title?: T;
+  description?: T;
+  frequency?: T;
+  customFrequency?: T;
+  nextDue?: T;
+  lastCompleted?: T;
+  priority?: T;
+  status?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "texts_select".
+ */
+export interface TextsSelect<T extends boolean = true> {
+  aid?: T;
+  title?: T;
+  content?: T;
+  type?: T;
+  language?: T;
+  summary?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  status?: T;
+  publishDate?: T;
+  author?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities_select".
+ */
+export interface UniversitiesSelect<T extends boolean = true> {
+  aid?: T;
+  name?: T;
+  type?: T;
+  country?: T;
+  city?: T;
+  address?: T;
+  website?: T;
+  email?: T;
+  phone?: T;
+  founded?: T;
+  description?: T;
+  accreditation?:
+    | T
+    | {
+        body?: T;
+        date?: T;
+        expiry?: T;
+        id?: T;
+      };
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "votes_select".
+ */
+export interface VotesSelect<T extends boolean = true> {
+  aid?: T;
+  title?: T;
+  description?: T;
+  type?: T;
+  startDate?: T;
+  endDate?: T;
+  options?:
+    | T
+    | {
+        option?: T;
+        description?: T;
+        id?: T;
+      };
+  eligibleVoters?:
+    | T
+    | {
+        voter?: T;
+        id?: T;
+      };
+  status?: T;
+  results?:
+    | T
+    | {
+        option?: T;
+        votes?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wallets_select".
+ */
+export interface WalletsSelect<T extends boolean = true> {
+  aid?: T;
+  name?: T;
+  type?: T;
+  balance?: T;
+  currency?: T;
+  accountNumber?: T;
+  bankName?: T;
+  routingNumber?: T;
+  description?: T;
+  status?: T;
+  lastTransaction?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "yards_select".
+ */
+export interface YardsSelect<T extends boolean = true> {
+  aid?: T;
+  name?: T;
+  type?: T;
+  size?:
+    | T
+    | {
+        length?: T;
+        width?: T;
+        area?: T;
+      };
+  address?: T;
+  city?: T;
+  country?: T;
+  description?: T;
+  features?:
+    | T
+    | {
+        feature?: T;
+        id?: T;
+      };
+  capacity?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "zoos_select".
+ */
+export interface ZoosSelect<T extends boolean = true> {
+  aid?: T;
+  name?: T;
+  description?: T;
+  country?: T;
+  city?: T;
+  address?: T;
+  website?: T;
+  email?: T;
+  phone?: T;
+  founded?: T;
+  size?: T;
+  annualVisitors?: T;
+  animals?:
+    | T
+    | {
+        species?: T;
+        count?: T;
+        exhibit?: T;
+        id?: T;
+      };
+  exhibits?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        size?: T;
+        id?: T;
+      };
+  status?: T;
+  openingHours?:
+    | T
+    | {
+        monday?: T;
+        tuesday?: T;
+        wednesday?: T;
+        thursday?: T;
+        friday?: T;
+        saturday?: T;
+        sunday?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1551,7 +3605,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "header".
  */
 export interface Header {
-  id: string;
+  id: number;
   navItems?:
     | {
         link: {
@@ -1560,11 +3614,11 @@ export interface Header {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -1580,7 +3634,7 @@ export interface Header {
  * via the `definition` "footer".
  */
 export interface Footer {
-  id: string;
+  id: number;
   navItems?:
     | {
         link: {
@@ -1589,11 +3643,11 @@ export interface Footer {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -1661,14 +3715,14 @@ export interface TaskSchedulePublish {
     doc?:
       | ({
           relationTo: 'pages';
-          value: string | Page;
+          value: number | Page;
         } | null)
       | ({
           relationTo: 'posts';
-          value: string | Post;
+          value: number | Post;
         } | null);
     global?: string | null;
-    user?: (string | null) | User;
+    user?: (number | null) | User;
   };
   output?: unknown;
 }
