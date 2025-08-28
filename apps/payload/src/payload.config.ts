@@ -8,37 +8,12 @@ import sharp from 'sharp' // sharp-import
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
-import { Categories } from './collections/Categories'
+import { Users } from './collections/Users'
+import { Products } from './collections/Products'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
-import { Users } from './collections/Users'
-import { Archive } from './collections/Archive'
-import { Base } from './collections/Base'
-import { Contractor } from './collections/Contractor'
-import { Deal } from './collections/Deal'
-import { Employee } from './collections/Employee'
-import { Finance } from './collections/Finance'
-import { Goal } from './collections/Goal'
-import { Human } from './collections/Human'
-import { Invoice } from './collections/Invoice'
-import { Location } from './collections/Location'
-import { Message } from './collections/Message'
-import { Outreach } from './collections/Outreach'
-import { Product } from './collections/Product'
-import { Customers } from './collections/Customers'
-import { Orders } from './collections/Orders'
-import { Instances } from './collections/Instances'
-import { Modules } from './collections/Modules'
-import { Licenses } from './collections/Licenses'
-import { Qualification } from './collections/Qualification'
-import { Routine } from './collections/Routine'
-import { Text } from './collections/Text'
-import { University } from './collections/University'
-import { Vote } from './collections/Vote'
-import { Wallet } from './collections/Wallet'
-import { Yard } from './collections/Yard'
-import { Zoo } from './collections/Zoo'
+import { Categories } from './collections/Categories'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
@@ -93,37 +68,12 @@ export default buildConfig({
     },
   }),
   collections: [
-    Pages, 
-    Posts, 
-    Media, 
-    Categories, 
     Users,
-    Archive,
-    Base,
-    Contractor,
-    Deal,
-    Employee,
-    Finance,
-    Goal,
-    Human,
-    Invoice,
-    Location,
-    Message,
-    Outreach,
-    Product,
-    Customers,
-    Orders,
-    Instances,
-    Modules,
-    Licenses,
-    Qualification,
-    Routine,
-    Text,
-    University,
-    Vote,
-    Wallet,
-    Yard,
-    Zoo
+    Products,
+    Media,
+    Pages,
+    Posts,
+    Categories,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

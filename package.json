@@ -1,32 +1,28 @@
 {
-    "name": "altrp-boilerplate",
-    "version": "1.0.0",
-    "description": "The Altrp Digital Asset Factory",
-    "private": true,
-    "packageManager": "bun@1.0.0",
-    "scripts": {
-        "build": "bun run --cwd apps/payload build",
-        "dev": "bun run --cwd apps/payload dev",
-        "lint": "bun run --cwd apps/payload lint",
-        "test": "bun run --cwd apps/payload test",
-        "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-        "setup": "cd scripts && bash setup.sh -d altrp.localhost",
-        "docker:up": "docker compose up --build -d",
-        "docker:down": "docker compose down -v",
-        "docker:logs": "docker compose logs -f",
-        "dev:payload": "bun install && bun run --cwd apps/payload dev"
-    },
-    "workspaces": [
-        "apps/*",
-        "packages/*"
-    ],
-    "devDependencies": {
-        "prettier": "^3.2.5"
-    },
-    "author": "Altrp.io",
-    "license": "MIT",
-    "dependencies": {
-        "lucide-react": "^0.537.0",
-        "react-hook-form": "^7.62.0"
-    }
+  "name": "medusa",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "medusa develop",
+    "build": "medusa build",
+    "seed": "medusa seed",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["medusa", "ecommerce"],
+  "author": "",
+  "license": "ISC",
+  "description": "MedusaJS ecommerce backend with admin panel",
+  "dependencies": {
+    "medusa": "^1.20.0",
+    "medusa-cli": "^1.3.0",
+    "@medusajs/admin": "^1.0.0",
+    "@medusajs/admin-ui": "^1.0.0",
+    "medusa-fulfillment-manual": "^1.1.0",
+    "medusa-payment-manual": "^1.0.0",
+    "medusa-file-local": "^1.0.0",
+    "@medusajs/event-bus-redis": "^1.0.0",
+    "@medusajs/cache-redis": "^1.0.0",
+    "dotenv": "^16.0.0"
+  }
 }
