@@ -27,3 +27,9 @@ yarn-error.log*
 .vscode/
 .idea/
 prompts/payload/local.md
+
+# E2E Tests
+tests/e2e/screenshots/
+tests/e2e/videos/
+test-results/
+playwright-report/

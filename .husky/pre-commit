@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Running pre-commit checks..."
+
+# Quick E2E test (Chrome only, no screenshots)
+echo "🌐 Running quick E2E test..."
+bun run test:e2e:quick
+
+echo "✅ Pre-commit checks completed!"
