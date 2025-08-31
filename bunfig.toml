@@ -5,9 +5,10 @@ workspaces = true
 # Caching for faster installation
 cache = true
 
-[install.scopes]
 # Settings for monorepo
 monorepo = true
+
+[install.scopes]
 
 [test]
 # Test settings

@@ -7,4 +7,7 @@ echo "🚀 Running pre-commit checks..."
 echo "🌐 Running quick E2E test..."
 bun run test:e2e:quick
 
+echo "🧪 Running unit tests..."
+bun run test:unit
+
 echo "✅ Pre-commit checks completed!"

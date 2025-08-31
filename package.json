@@ -15,12 +15,12 @@
     "docker:down": "docker compose down -v",
     "docker:logs": "docker compose logs -f",
     "dev:payload": "bun install && bun run --cwd apps/payload dev",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:payload": "playwright test tests/e2e/payload/",
     "test:e2e:quick": "bunx playwright test tests/e2e/quick.spec.ts --project=payload-chromium --reporter=list",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "test:int:collections": "bun run --cwd apps/payload test:int",
+    "test:unit": "bun run --cwd apps/payload test:unit"
   },
   "workspaces": [
     "apps/*",
@@ -28,7 +28,8 @@
   ],
   "devDependencies": {
     "@playwright/test": "^1.55.0",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "vitest": "3.2.3"
   },
   "author": "Altrp.io",
   "license": "MIT",
@@ -37,6 +38,6 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.1.5",
     "lucide-react": "^0.537.0",
-    "react-hook-form": "^7.62.0"
+    "payload": "3.50.0"
   }
 }

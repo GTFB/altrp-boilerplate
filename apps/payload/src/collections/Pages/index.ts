@@ -40,7 +40,7 @@ export const Pages: CollectionConfig<'pages'> = {
     slug: true,
   },
   admin: {
-    defaultColumns: ['aid', 'title', 'slug', 'updatedAt'],
+    defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
@@ -61,37 +61,6 @@ export const Pages: CollectionConfig<'pages'> = {
     useAsTitle: 'title',
   },
   fields: [
-    {
-      name: 'aid',
-      type: 'text',
-      required: true,
-      unique: true,
-      admin: {
-        description: 'Unique Alternative Identifier (AID)',
-      },
-      db: {
-        type: 'aid',
-      },
-      hooks: {
-        beforeValidate: [
-          /**
-           * Generates AID before document validation
-           */
-          ({ data }) => {
-            if (!data.aid) {
-              // Generate AID in format: P-XXXXXX (P for Page)
-              const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-              let result = 'P-'
-              for (let i = 0; i < 6; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length))
-              }
-              data.aid = result
-            }
-            return data
-          },
-        ],
-      },
-    },
     {
       name: 'title',
       type: 'text',

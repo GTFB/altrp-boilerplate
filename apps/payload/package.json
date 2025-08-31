@@ -15,7 +15,8 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "bun run test:int && bun run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --no-experimental-strip-types\" bunx playwright test",
-    "test:int": "cross-env NODE_OPTIONS=--no-deprecation bunx vitest run --config ./vitest.config.mts"
+    "test:int": "cross-env NODE_OPTIONS=--no-deprecation bunx vitest run --config ./vitest.config.mts",
+    "test:unit": "cross-env NODE_OPTIONS=--no-deprecation bunx vitest run --config ./vitest.unit.config.mts"
   },
   "dependencies": {
     "@payloadcms/admin-bar": "3.50.0",
@@ -42,7 +43,6 @@
     "dotenv": "16.4.7",
     "geist": "^1.3.0",
     "graphql": "^16.8.2",
-    "lucide-react": "^0.537.0",
     "next": "15.4.4",
     "next-sitemap": "^4.2.3",
     "payload": "3.50.0",

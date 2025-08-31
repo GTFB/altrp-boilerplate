@@ -320,10 +320,6 @@ export interface Media {
 export interface Page {
   id: number;
   /**
-   * Unique Alternative Identifier (AID)
-   */
-  aid: string;
-  /**
    * Page title
    */
   title: string;
@@ -399,10 +395,6 @@ export interface Page {
 export interface Post {
   id: number;
   /**
-   * Unique Alternative Identifier (AID)
-   */
-  aid: string;
-  /**
    * Post title
    */
   title: string;
@@ -474,13 +466,9 @@ export interface Post {
 export interface Category {
   id: number;
   /**
-   * Unique Alternative Identifier (AID)
-   */
-  aid: string;
-  /**
    * Category title
    */
-  title?: string | null;
+  title: string;
   parent?: (number | null) | Category;
   breadcrumbs?:
     | {
@@ -1225,7 +1213,6 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
-  aid?: T;
   title?: T;
   hero?:
     | T
@@ -1361,7 +1348,6 @@ export interface FormBlockSelect<T extends boolean = true> {
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
-  aid?: T;
   title?: T;
   heroImage?: T;
   content?: T;
@@ -1393,7 +1379,6 @@ export interface PostsSelect<T extends boolean = true> {
  * via the `definition` "categories_select".
  */
 export interface CategoriesSelect<T extends boolean = true> {
-  aid?: T;
   title?: T;
   parent?: T;
   breadcrumbs?:
