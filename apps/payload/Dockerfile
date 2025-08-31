@@ -25,8 +25,17 @@ COPY --from=pruner /app/out/package-lock.json ./package-lock.json
 # Install dependencies
 RUN npm ci
 
-# 4. Final Stage: Copy everything and prepare for runtime build
-FROM base AS runner
+# 4. Builder Stage: Build the Next.js app during image build
+FROM base AS builder
+WORKDIR /app
+# Reuse installed deps and full source for build
+COPY --from=installer /app/ .
+COPY --from=pruner /app/out/full/ .
+# Build only the payload app (Next.js)
+RUN cd apps/payload && npm run build
+
+# 5. Final Stage (Runtime): Bun-only runtime, no build here
+FROM oven/bun:1 AS runner
 WORKDIR /app
 
 # Set environment variables
@@ -34,6 +43,12 @@ ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
 ENV DATABASE_URI=$DATABASE_URI
 ENV NODE_ENV=$NODE_ENV
 ENV NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+
+# Install tools needed at runtime
+USER root
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends postgresql-client \
+  && rm -rf /var/lib/apt/lists/*
 
 # Copy .env file if it exists (for local development)
 COPY .env* ./
@@ -43,19 +58,15 @@ COPY --from=installer /app/ .
 COPY --from=pruner /app/out/full/ .
 # Copy turbo.json for Turborepo configuration
 COPY --from=pruner /app/turbo.json ./turbo.json
+# Copy built Next.js artifacts produced in the builder stage
+COPY --from=builder /app/apps/payload/.next ./apps/payload/.next
 
 # Copy the start script
 COPY apps/payload/start.sh /app/start.sh
 RUN chmod +x /app/start.sh
 
-# Don't run production as root
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
-
-# Change ownership of the app directory to the nextjs user
-RUN chown -R nextjs:nodejs /app
-
-USER nextjs
+# Use non-root user provided by Bun image
+USER bun
 EXPOSE 3000
 
 # Use the start script
